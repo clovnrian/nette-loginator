@@ -1,0 +1,5 @@
+services:
+  authenticator: Clovnrian\Loginator\LoginatorAuthenticator
+
+  signInControlFactory:
+    implement: Clovnrian\Loginator\Components\ISignInControlFactory
