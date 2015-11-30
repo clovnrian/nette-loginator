@@ -1,0 +1,28 @@
+{
+  "name": "clovnriant/loginator",
+  "description": "Login service for Nette",
+  "keywords": ["nette", "facebook", "google", "log-in", "sign-in"],
+  "license": "GNU",
+
+  "authors": [
+    {
+      "name": "Miroslav Babják",
+      "email": "clovnrian@gmail.com"
+    }
+  ],
+
+  "require": {
+    "php": ">=5.3.1",
+    "nette/nette": "2.3.*"
+  },
+
+  "require-dev": {
+    "nette/tester": "1.6.*"
+  },
+
+  "autoload": {
+    "psr-0": {
+      "Clovnrian\\Loginator": "src/"
+    }
+  }
+}

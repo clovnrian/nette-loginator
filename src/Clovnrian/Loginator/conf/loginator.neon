@@ -1,0 +1,2 @@
+services:
+  authenticator: Clovnrian\Loginator\LoginatorAuthenticator
