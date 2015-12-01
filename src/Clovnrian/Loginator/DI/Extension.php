@@ -16,6 +16,18 @@ class Extension extends CompilerExtension
     ],
     'signIn' => [
       'templatePath' => 'sign-in.latte',
+      'nameField' => [
+        'label' => 'Username:',
+        'requireText' => 'Please enter your username.'
+      ],
+      'passwordField' => [
+        'label' => 'Password:',
+        'requireText' => 'Please enter your password.'
+      ],
+      'rememberField' => [
+        'label' => 'Keep me signed in',
+      ],
+      'submitText' => 'Sign in'
     ],
   ];
 
@@ -30,6 +42,7 @@ class Extension extends CompilerExtension
       ->addSetup('setConfig', [$config['database']]);
 
     $builder->getDefinition($this->prefix('signInControlFactory'))
-      ->addSetup('setTemplatePath', [$config['signIn']['templatePath']]);
+      ->addSetup('setTemplatePath', [$config['signIn']['templatePath']])
+      ->addSetup('setFormConfig', [$config['signIn']]);
   }
 }

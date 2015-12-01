@@ -4,15 +4,16 @@ namespace Clovnrian\Loginator\Components;
 
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
-use Nette\Localization\ITranslator;
+use Nette\Security\User as SUser;
+use Nette\Security\AuthenticationException;
 
 class SignInControl extends Control
 {
   /** @var string */
   private $templatePath = "sign-in.latte";
 
-  /** @var ITranslator */
-  private $translator;
+  /** @var SUser */
+  private $sUser;
 
   /** @var array */
   public $onSuccess;
@@ -26,12 +27,15 @@ class SignInControl extends Control
   /** @var array */
   public $onSubmit;
 
+  /** @var array */
+  private $formConfig;
+
   /**
-   * @param ITranslator $translator
+   * @param SUser $sUser
    */
-  public function __construct(ITranslator $translator)
+  public function __construct(SUser $sUser)
   {
-    $this->translator = $translator;
+    $this->sUser = $sUser;
   }
 
 
@@ -45,9 +49,14 @@ class SignInControl extends Control
   {
     $form = new Form();
 
-    $form->addText('name', 'loginator.signIn.labels.name');
-    $form->addPassword('password', 'loginator.signIn.labels.password');
-    $form->addSubmit('login', 'loginator.signIn.labels.signIn');
+    $form->addText('username', $this->formConfig['nameField']['label'])
+      ->setRequired($this->formConfig['nameField']['requireText']);
+
+    $form->addPassword('password', $this->formConfig['passwordField']['label'])
+      ->setRequired($this->formConfig['passwordField']['requireText']);
+
+    $form->addCheckbox('remember', $this->formConfig['rememberField']['label']);
+    $form->addSubmit('login', $this->formConfig['submitText']);
 
     $form->onSuccess[] = function($submit) {
       $this->formSuccess($submit->form);
@@ -73,7 +82,19 @@ class SignInControl extends Control
 
   public function formSuccess(Form $form)
   {
+    $values = $form->getValues();
 
+    if ($values->remember) {
+      $this->sUser->setExpiration('14 days', FALSE);
+    } else {
+      $this->sUser->setExpiration('2 hours', TRUE);
+    }
+
+    try {
+      $this->sUser->login($values->username, $values->password);
+    } catch (AuthenticationException $e) {
+      $form->addError($e->getMessage());
+    }
   }
 
   public function formValidate(Form $form)

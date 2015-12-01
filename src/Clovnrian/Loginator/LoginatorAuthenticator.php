@@ -5,7 +5,6 @@ namespace Clovnrian\Loginator;
 use Nette\Security as NS;
 use Nette\Object;
 use Nette\Database\Context;
-use Nette\Localization\ITranslator;
 use Clovnrian\Loginator\Exceptions\BadConfiguration;
 use Nette\Database\DriverException;
 
@@ -17,17 +16,12 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
   /** @var array */
   private $config;
 
-  /** @var ITranslator */
-  private $translator;
-
   /**
    * @param Context     $database
-   * @param ITranslator $translator
    */
-  function __construct(Context $database, ITranslator $translator)
+  function __construct(Context $database)
   {
     $this->database = $database;
-    $this->translator = $translator;
   }
 
   /**
@@ -48,7 +42,7 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
     }
 
     if (!$row) {
-      throw new NS\AuthenticationException($this->translator->translate("loginator.errors.notFound"));
+      throw new NS\AuthenticationException('User not found');
     }
 
     if (!$row->offsetExists($this->config['passwordColumnName'])) {
@@ -62,7 +56,7 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
     }
 
     if (!NS\Passwords::verify($password, $row->offsetGet($this->config['passwordColumnName']))) {
-      throw new NS\AuthenticationException($this->translator->translate("loginator.errors.invalidPassword"));
+      throw new NS\AuthenticationException('Invalid password');
     }
 
     if (!$row->offsetExists($this->config['roleColumnName'])) {
