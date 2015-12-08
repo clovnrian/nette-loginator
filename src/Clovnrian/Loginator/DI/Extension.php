@@ -32,7 +32,7 @@ class Extension extends CompilerExtension
 
     $this->compiler->parseServices($builder, $this->loadFromFile(__DIR__ . '/../config/loginator.neon'), $this->name);
 
-    $builder->getDefinition($this->prefix('signInControlFactory'))
+    $builder->getDefinition($this->prefix('signInControl.factory'))
       ->addSetup('setTemplatePath', [$config['signIn']['templatePath']])
       ->addSetup('setFormConfig', [$config['signIn']]);
   }
