@@ -7,6 +7,10 @@ use Nette\Application\UI\Form;
 use Nette\Security\User as SUser;
 use Nette\Security\AuthenticationException;
 
+/**
+ * @method SignInControl setTemplatePath($templatePath)
+ * @method SignInControl setFormConfig($formConfig)
+ */
 class SignInControl extends Control
 {
   /** @var string */
