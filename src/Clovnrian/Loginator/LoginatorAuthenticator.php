@@ -13,9 +13,6 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
   /** @var Context */
   public $database;
 
-  /** @var array */
-  private $config;
-
   /**
    * @param Context     $database
    */
@@ -35,8 +32,8 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
     list($username, $password) = $credentials;
 
     try {
-      $row = $this->database->table($this->config['tableName'])
-        ->where($this->config['loginColumnName'], $username)->fetch();
+      $row = $this->database->table('users')
+        ->where('username', $username)->fetch();
     } catch (DriverException $e) {
       throw new BadConfiguration($e->getMessage());
     }
@@ -45,30 +42,16 @@ class LoginatorAuthenticator extends Object implements NS\IAuthenticator
       throw new NS\AuthenticationException('User not found');
     }
 
-    if (!$row->offsetExists($this->config['passwordColumnName'])) {
-      throw new BadConfiguration(
-        sprintf(
-          "Password column \"%s\" wasn't found in table \"%s\"",
-          $this->config['passwordColumnName'],
-          $this->config['tableName']
-        )
-      );
-    }
+    if (!$row->offsetExists('password'))
+      throw new BadConfiguration("Password column wasn't found");
 
-    if (!NS\Passwords::verify($password, $row->offsetGet($this->config['passwordColumnName']))) {
+    if (!NS\Passwords::verify($password, $row->offsetGet('password'))) {
       throw new NS\AuthenticationException('Invalid password');
     }
 
-    if (!$row->offsetExists($this->config['roleColumnName'])) {
-      throw new BadConfiguration(
-        sprintf(
-          "Role column \"%s\" wasn't found in table \"%s\"",
-          $this->config['roleColumnName'],
-          $this->config['tableName']
-        )
-      );
-    }
+    if (!$row->offsetExists('role'))
+      throw new BadConfiguration("Role column wasn't found");
 
-    return new NS\Identity($row->id, $row->offsetGet($this->config['roleColumnName']), $row->toArray());
+    return new NS\Identity($row->id, $row->offsetGet('role'), $row->toArray());
   }
 }
