@@ -1,6 +1,6 @@
 <?php
 
-namespace Clovnrian\Loginator\Components;
+namespace Clovnrian\Loginator\Components\SignIn;
 
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Clovnrian\Loginator\Components;
+namespace Clovnrian\Loginator\Components\SignIn;
 
 interface ISignInControlFactory
 {
