@@ -30,7 +30,7 @@ class Extension extends CompilerExtension
     $config = $this->getConfig($this->defaultConfig);
     $builder = $this->getContainerBuilder();
 
-    $this->compiler->parseServices($builder, $this->loadFromFile(__DIR__ . '../config/loginator.neon'), $this->name);
+    $this->compiler->parseServices($builder, $this->loadFromFile(__DIR__ . '/../config/loginator.neon'), $this->name);
 
     $builder->getDefinition($this->prefix('signInControlFactory'))
       ->addSetup('setTemplatePath', [$config['signIn']['templatePath']])
